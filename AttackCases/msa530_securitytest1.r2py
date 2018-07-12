@@ -1,0 +1,29 @@
+#msa530_attack1.r2py
+#Description: Open a new file, it should read 'SE'. Else, its an error!
+
+#Statistics:
+# 1 logged ATTACK 1 | ERROR | New File Open Operation is not handled properly!
+# 39 Failed due to fatal error
+# 20 Failed due to Unhandled Exception
+# 67 Secured Layers
+
+# New File Open Operation
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+try:
+  # Empty/New File should have contents 'SE' satisfying the given requirements
+  assert('SE' == myfile.readat(2,0))
+  # Close the file
+  myfile.close()
+except:
+  myfile.close()
+  # Error Handle or Failure Condition
+  log("ATTACK 1 | ERROR | New File Open Operation is not handled properly!\n")

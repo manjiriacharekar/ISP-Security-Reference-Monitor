@@ -1,0 +1,45 @@
+#msa530_attack6.r2py
+#Description: Open a file, write invalid data and close it. Check if previously written valid data is retained. Else, its an error!
+
+#Statistics:
+# 2 logged ATTACK 6 | ERROR | For invalid data write, previously written valid data is not retained!
+# 4 Failed due to fatal error
+# 8 Failed due to Unhandled Exception
+# 16 Secured Layers
+
+# New File Open and Write Invalid data Operation
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+
+# Write invalid data to the file
+myfile.writeat("Test",0)
+
+#Close the file
+myfile.close()
+
+# Reopen file again to read
+myfile=ABopenfile("testfile.txt",True)
+
+#Read to check contents
+try:
+  # File should have contents 'SE' satisfying the given requirements
+  assert('SE' == myfile.readat(2,0))
+  # Close the file
+  myfile.close()
+except:
+  myfile.close()
+  # Error Handle or Failure Condition
+  log("ATTACK 6 | ERROR | For invalid data write, previously written valid data is not retained!\n")
+finally:
+  exitall()
+
+
+

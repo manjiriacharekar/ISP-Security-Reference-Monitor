@@ -1,0 +1,48 @@
+#msa530_attack15.r2py
+#Description: Multithreading- Two threads try to write on the same file. This should not be allowed. Else, its an error!
+
+#Statistics:
+# 24 logged ATTACK 15 | ERROR | Single file altered by two Threads!
+# 19 Failed due to fatal error
+# 41 Failed due to Unhandled Exception
+# 47 Secured Layers
+
+# New File Open Operation
+
+# A thread to bypass Triggered Race Conditions Programs / Infinite Loop
+def close_after(t):
+  def sleep_for():
+    # Terminated the program after sleeping t sec
+    sleep(t)
+    log("Unsuccessful Operation as Program Triggered Race Condition / Infinite Loop\n")
+    exitall()
+  return sleep_for
+terminate_program = close_after(4)
+createthread(terminate_program)
+
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# New File Operation
+myfile=ABopenfile("testfile.txt", True)
+
+def threadone():
+  #WRITE Operation
+  myfile.writeat("SpassE",0)
+
+def threadtwo():
+  #WRITE Operation
+  myfile.writeat("SpassEsecurityE",0)
+
+createthread(threadone)
+createthread(threadtwo)
+myfile.close()
+
+myfile=ABopenfile("testfile.txt", True)
+if myfile.readat(None,0) == "SpassEsecurityE":
+  log("ATTACK 15 | ERROR | Single file altered by two Threads!\n")
+myfile.close()

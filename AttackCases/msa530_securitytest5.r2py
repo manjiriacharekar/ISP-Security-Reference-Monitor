@@ -1,0 +1,31 @@
+#msa530_attack5.r2py
+#Description: Write to Higher offset value, its an error!
+
+#Statistics:
+# 6 logged ATTACK 5 | ERROR | EOF or Higher Offset Value not handled properly!
+# 20 Failed due to Unhandled Exception
+# 105 Secured Layers
+
+# New File Open Operation and Write to Higher Offset Value
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+# Write valid data to the file
+try:
+  myfile.writeat("SpassE",100)
+except SeekPastEndOfFileError:
+  pass
+else:
+  log("ATTACK 5 | ERROR | EOF or Higher Offset Value not handled properly!\n")
+finally:
+  exitall()
+
+#Close the file
+myfile.close()

@@ -1,0 +1,52 @@
+#msa530_attack11.r2py
+#Description: Open a huge file, to read/write. If not allowed to read/write, its an error!
+
+#Statistics:
+# 3 logged ATTACK 11 | ERROR | Huge File Read/Write Operation not handled!
+# 10 Failed due to fatal error
+# 27 Failed due to Unhandled Exception
+# 7 Timed Out Failure/ Race Condition
+# 84 Secured Layers
+
+# New File Open And Write valid data Operation 
+
+# A thread to bypass Triggered Race Conditions Programs / Infinite Loop
+def close_after(t):
+  def sleep_for():
+    # Terminated the program after sleeping t sec
+    sleep(t)
+    log("Unsuccessful Operation as Program Triggered Race Condition / Infinite Loop\n")
+    exitall()
+  return sleep_for
+terminate_program = close_after(10)
+createthread(terminate_program)
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+#Write Operation
+try:
+  myfile.writeat("SpassE"*100000,0)
+except:
+  log("ATTACK 11 | ERROR | Huge File Read/Write Operation not handled!\n")
+
+myfile.close()
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #AB file Exists
+
+#Read Operation
+try:
+  myfile.readat(None,0)
+except:
+  log("ATTACK 11 | ERROR | Huge File Read/Write Operation not handled!\n")
+finally:
+  exitall()
+
+myfile.close()

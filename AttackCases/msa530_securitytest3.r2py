@@ -1,0 +1,32 @@
+#msa530_attack3.r2py
+#Description: Read a file with a negative byte value, its an error!
+
+#Statistics:
+# 4 logged ATTACK 3 | ERROR | Allowed to read file with negative byte value!
+# 23 Failed due to Unhandled Exception
+# 104 Secured Layers
+
+# New File Open Operation to Read file with negative byte value.
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+# Read data from the file
+try:
+  myfile.readat(-2,0)
+except RepyArgumentError:
+  pass
+else:
+  log("ATTACK 3 | ERROR | Allowed to read file with negative byte value!\n")
+finally:
+  exitall()
+
+#Close the file
+myfile.close()
+

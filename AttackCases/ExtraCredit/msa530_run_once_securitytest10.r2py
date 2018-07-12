@@ -1,0 +1,32 @@
+#msa530_attack10.r2py
+#Description: Open an Existing file, with create parameter 'False'. It should allow to open the file. Else, its an error!
+
+#Statistics:
+# 1 logged ATTACK 10 | ERROR | NOT allowed to Open an Existing File with create parameter 'False'!
+# 14 Failed due to fatal error
+# 7 Failed due to Unhandled Exception
+# 9 Secured Layers
+
+# New File Open Operation
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+#Close the file
+myfile.close()
+
+# Since remove operation was not called, File should exist.
+# Open File, again
+try:
+  myfile=ABopenfile("testfile.txt",False)
+except:
+  log("ATTACK 10 | ERROR | NOT allowed to Open an Existing File with create parameter 'False'!\n")
+
+#Close the file
+myfile.close()

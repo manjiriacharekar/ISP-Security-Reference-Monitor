@@ -1,0 +1,52 @@
+#msa530_attack7.r2py
+#Description: Open a file and write valid data. Valid data should be appended. Else, its an error!
+
+#Statistics:
+# 6 logged ATTACK 7 | ERROR | File Valid data Write Operation is not handled properly!
+# 2 Failed due to fatal error
+# 19 Failed due to Unhandled Exception
+# 3 Secured Layers
+
+# New File Open and Write valid data Operation
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+# Write valid data to the file
+myfile.writeat("SpassE",0)
+
+#Close the file
+myfile.close()
+
+# Write operation to APPEND Valid Data
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+# Write valid data to the file
+myfile.writeat("securityE",6)
+
+#Close the file
+myfile.close()
+
+# READ OPERATION
+# Reopen file again to read
+myfile=ABopenfile("testfile.txt",True)
+
+# Read the file to check the contents
+try:
+ assert('SpassEsecurityE' == myfile.readat(None,0))
+ #Close the file
+ myfile.close()
+except:
+ #Close the file
+ myfile.close()
+ log("ATTACK 7 | ERROR | File Valid data Write Operation is not handled properly! \n")
+finally:
+  exitall()

@@ -1,0 +1,45 @@
+#msa530_attack5.r2py
+#Description: Multithreading- One thread creates and other tries to remove. It should not be allowed to remove. Else, its an error!
+
+#Statistics:
+# 12 logged ATTACK 5 | ERROR | Multithreading- File removed while another thread is writing on the same file!
+# 7 Failed due to Unhandled Exception
+# 12 Secured Layers
+
+# Thread Operations
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+
+def threadone():
+  # New File Operation
+  myfile=ABopenfile("testfile.txt", True)
+  #READ Operation
+  if myfile.readat(2,0) == "SE":
+    try:
+      #WRITE Operation
+      myfile.writeat("Spass1E",0)
+      sleep(3)
+      myfile.close()
+    except RepyArgumentError:
+      pass
+    finally:
+      exitall()
+
+def threadtwo():
+  try:
+    #REMOVE Operation
+    if "testfile.txt.a" in listfiles():
+      removefile("testfile.txt.a")
+    if "testfile.txt.b" in listfiles():
+      removefile("testfile.txt.b")
+    log("ATTACK 5 | ERROR | Multithreading- File removed while another thread is writing on the same file!\n")
+  finally:
+    exitall()
+
+createthread(threadone)
+createthread(threadtwo)

@@ -1,0 +1,32 @@
+#msa530_attack4.r2py
+#Description: Read with a negative offset value, its an error!
+
+#Statistics:
+# 4 logged ATTACK 4 | ERROR | Allowed to read file with negative offset value!
+# 20 Failed due to Unhandled Exception
+# 107 Secured Layers
+
+# New File Open Operation to Read file with negative offset value.
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+# Read data from the file
+try:
+  myfile.readat(2,-2)
+except RepyArgumentError:
+  pass
+else:
+  log("ATTACK 4 | ERROR | Allowed to read file with negative offset value!\n")
+finally:
+  exitall()
+
+#Close the file
+myfile.close()
+

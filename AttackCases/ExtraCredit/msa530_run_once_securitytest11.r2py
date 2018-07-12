@@ -1,0 +1,32 @@
+#msa530_attack11.r2py
+#Description: To check if previous backup file is stored in system, else its an error!
+
+#Statistics:
+# 2 logged ATTACK 11 | ERROR | Backup File is not stored in the system!
+# 6 Failed due to fatal error
+# 7 Failed due to Unhandled Exception
+# 15 Secured Layers
+
+
+# New File Open Operation
+# Clean up of existing file
+for file in listfiles():
+    if "testfile" in file:
+        removefile(file)
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+myfile.writeat("STest1E",0)
+
+myfile.close()
+
+file_found = 0
+for file in listfiles():
+    if "testfile" in file:
+        checkfile=openfile(file,True)
+        if checkfile.readat(2,0) == "SE":
+          file_found = 1
+
+if file_found == 0:
+    log("ERROR - ATTACK 11 | Backup File is not stored in the system! \n")

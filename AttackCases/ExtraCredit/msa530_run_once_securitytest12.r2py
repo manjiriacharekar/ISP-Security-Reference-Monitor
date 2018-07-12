@@ -1,0 +1,37 @@
+#msa530_attack12.r2py
+#Description: Read a file with a byte value greater than the bytes written that is after EOF, its an error!
+
+#Statistics:
+# 21 logged ATTACK 12 | ERROR | Allowed to read file with byte value greater than the bytes written!
+# 7 Failed due to Unhandled Exception
+# 3 Secured Layers
+
+# New File Open Operation to Read file with byte value greater than the bytes written.
+
+# Remove existing Files
+if "testfile.txt.a" in listfiles():
+  removefile("testfile.txt.a")
+if "testfile.txt.b" in listfiles():
+  removefile("testfile.txt.b")
+
+# Open File 
+myfile=ABopenfile("testfile.txt",True)  #Create an AB file
+
+# Write valid data to the file
+myfile.writeat("SpassE",0)
+
+# Read data from the file
+#bytes written 6 (EOF)
+#bytes trying to read 8 
+try:
+  myfile.readat(8,0)
+except RepyArgumentError:
+  pass
+else:
+  log("ATTACK 12 | ERROR | Allowed to read file with byte value greater than the bytes written!\n")
+finally:
+  exitall()
+
+#Close the file
+myfile.close()
+
